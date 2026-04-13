@@ -22,7 +22,9 @@ bool ldl_inserir_antes(Node *no, int valor) {
 
     Node *ant = no->ant;
     
-    ant->prox = novo;
+    if(ant != nullptr)
+        ant->prox = novo;
+   
     no->ant = novo;
 
     novo->ant = ant;
@@ -40,7 +42,9 @@ bool ldl_inserir_depois(Node *no, int valor) {
 
     Node *prox = no->prox;
     
-    prox->ant = novo;
+    if(prox != nullptr)
+        prox->ant = novo;
+
     no->prox = novo;
 
     novo->prox = prox;
@@ -54,8 +58,12 @@ bool ldl_inserir_depois(Node *no, int valor) {
 bool ldl_remover(Node *no) {
     if(no == nullptr) return false;
 
-    no->ant->prox = no->prox;
-    no->prox->ant = no->ant;
+    if(no->ant != nullptr)
+        no->ant->prox = no->prox;
+
+    if(no->prox != nullptr)
+        no->prox->ant = no->ant;
+    
     free(no);
 
     return true;
@@ -66,10 +74,16 @@ int ldl_tamanho(Node *no) {
     if(no == nullptr) return 0;
 
     int n = 1;
-    Node *final = no;
-    while(final->prox != no) {
+    Node *atual = no;
+    while(atual->prox != nullptr) {
         n++;
-        final = final->prox;
+        atual = atual->prox;
+    }
+
+    atual = no;
+    while(atual->ant != nullptr) {
+        n++;
+        atual = atual->ant;
     }
 
     return n;
